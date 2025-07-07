@@ -1,36 +1,27 @@
-import React from 'react';
 import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-type PageProps = {
+interface MovieDetailPageProps {
   params: {
     id: string;
   };
-};
+}
 
-// Optional: dynamically generate metadata for SEO
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = params;
-
+// ✅ Correct: Promise<Metadata>
+export async function generateMetadata({ params }: MovieDetailPageProps): Promise<Metadata> {
   return {
-    title: `Movie #${id} | Movie Explorer`,
-    description: `Details and information about Movie ID: ${id}`,
+    title: `Movie #${params.id}`,
   };
 }
 
-export default async function MovieDetailPage({ params }: PageProps) {
-  const { id } = params;
-
-  // ✅ Example fetch logic (replace with real TMDB API call)
-  // const res = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${process.env.NEXT_PUBLIC_TMDB_API_KEY}`);
-  // const movie = await res.json();
+// ✅ Correct: `params` is a plain object, not a Promise
+export default async function MovieDetailPage({ params }: MovieDetailPageProps) {
+  const movieId = params.id;
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold">🎬 Movie Detail Page</h1>
-      <p className="mt-4">You are viewing movie with ID: <strong>{id}</strong></p>
-
-      {/* Optional: display movie data if you fetch it */}
-      {/* <div>{movie.title}</div> */}
+      <p>Movie ID: {movieId}</p>
     </div>
   );
 }
